@@ -1,0 +1,61 @@
+1.到官網上下載Heroku
+https://devcenter.heroku.com/articles/getting-started-with-python#set-up
+
+2.註冊並登錄Heroku的帳號
+
+3.打開Terminal終端機並輸入以下程式來登錄Heroku
+ heroku login
+
+4.在heroku創建一個app並將Buildpacks設定為python(我們這邊要上傳的是py檔案)
+ heroku create food-assistant --buildpack heroku/python
+  其中create後面放app專案的名字，例如food-assistant就是一個專案的名字
+
+5.利用以下git指令將我們的程式碼上傳到git
+	1）先cd到目前檔案路徑下面
+	> cd /Users/apple/Desktop/LineBot
+	2) 初始化這個目錄，讓Git對當前目錄
+	> git init
+	3）設定Git global的使用者郵箱
+	> git config --global user.email "email"
+	4）設定Git global的發布使用者名稱 
+	> git config --global user.name "name"
+	5) 查看目前檔案的狀態，哪些文檔有更動
+	> git status
+	6) 將目前所有有更動的地方更新到Git中
+	> git add .
+	7) 給更新的部分加上commit
+	> git commit -m "XXXXX"
+	   其中XXXXX是commit的內容
+
+6.在Heroku中找到對應的app的專案
+ heroku git:remote -a food-assistant
+  其中-a之後的就是app專案的名稱，其中food-assistant就是專案的名稱
+
+*********************************************************************************************
+注意：用anaconda環境下的python的話會出現一大推error，以本機為例，我用以下方式處理
+(1)先用Homebrew安裝python最新版本
+   > brew install python3
+(2)利用pycharm創建一個新的專案並將環境指定為我們第一部安裝好的檔案中
+(3)搭建linebot環境，安裝需要的api
+(4)將預設的pip以及python 
+   > open ~/.bash_profile
+   在 bash_profile中加入以下語句
+    > PATH="/usr/local/Cellar/python/3.7.1/bin:${PATH}"
+    > export PATH
+    > alias python="/usr/local/Cellar/python/3.7.1/bin/python3"
+    > alias pip="/usr/local/Cellar/python/3.7.1/bin/pip3"
+   > source .bash_profile
+*********************************************************************************************
+
+7.安裝gunicorn方便之後在
+ pip install gunicorn
+
+8.創建requirements.txt紀錄的我們python中用到哪些套件用於告訴Heroku需要用到哪些套件
+ pip freeze > requirements.txt
+  
+9.創建Profile告訴heroku
+echo "web: gunicorn linebot:app" > Procfile
+  其中linebot是我們上傳的檔案linebot.py
+
+10.將Git中的文件上傳到Heroku上面
+ git push heroku master
